@@ -3,8 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>聊天机器人</title>
+    <style type="text/css">
+        #bg {
+        }
+        #tittle {
+            font-family: 楷体,serif;
+            text-align: center;
+        }
+        #chat {
+            font-size: x-large;
+        }
+        #send {
+        }
+    </style>
 </head>
-<body>
+<script>
+    document.onkeydown = function (ev) {
+        if(ev.keyCode === 13){
+            send()
+        }
+    }
+</script>
+<body bgcolor="#f5f5dc">
+<div id="bg">
+    <div id="tittle">
+        <h1>简易聊天机器人</h1>
+    </div>
+    <div id="chat">
+        Robot: Hello, world! :)<br>
+    </div>
+    <div id="send">
+        <label>
+            <input type="text" id="input" placeholder='点击"发送"或"Enter"发送你想说的话!'>
+            <input type="button" onclick="send()" width="2000px" value="发送">
+        </label>
+    </div>
+</div>
+<script>
+    function replace(text) {
+        document.getElementById("chat").innerText += "Robot: " + "TODO" + "\n";
+    }
+    function send() {
+        let text = document.getElementById("input").value;
+        document.getElementById("input").value = "";
+        document.getElementById("chat").innerText += "You: " + text + "\n";
+        replace(text);
+    }
 
+
+</script>
 </body>
 </html>
