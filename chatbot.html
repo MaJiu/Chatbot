@@ -17,13 +17,6 @@
         }
     </style>
 </head>
-<script>
-    document.onkeydown = function (ev) {
-        if(ev.keyCode === 13){
-            send()
-        }
-    }
-</script>
 <body bgcolor="#f5f5dc">
 <div id="bg">
     <div id="tittle">
@@ -40,17 +33,33 @@
     </div>
 </div>
 <script>
+    //绑定键盘Enter键
+    document.onkeydown = function (ev) {
+        if(ev.keyCode === 13){
+            send()
+        }
+    }
+    let session = Math.random().toString(); //获取一个session
     function replace(text) {
-        document.getElementById("chat").innerText += "Robot: " + "TODO" + "\n";
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState === 4 && xhr.status === 200){
+                let rep = JSON.parse(xhr.responseText);
+                if (rep['code'] === 0)
+                    document.getElementById("chat").innerText += "Robot: " + rep['replace'] + "\n";
+                else
+                    document.getElementById("chat").innerText += "Robot: " + "出错了!" + "\n";
+            }
+        }
+        xhr.open("GET","http://mjyzz.club/chatbot.php?" + "session=" + session +"&mesg=" + text,true);
+        xhr.send();
     }
     function send() {
         let text = document.getElementById("input").value;
-        document.getElementById("input").value = "";
-        document.getElementById("chat").innerText += "You: " + text + "\n";
+        document.getElementById("input").value = ""; //清空
+        document.getElementById("chat").innerText += "You: " + text + "\n"; //回显
         replace(text);
     }
-
-
 </script>
 </body>
 </html>
