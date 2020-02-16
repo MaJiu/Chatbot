@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天机器人</title>
+    <link rel="stylesheet" type="text/css" href="css/chat.css">
+</head>
+<body>
+<div id="bg">
+    <!-- 标题栏 -->
+    <div id="tittle">
+        <img src="img/return.png" alt="加载失败" id="return">
+        <span style="font-size: 20px">Mark</span>
+        <img src="img/point.png" alt="" id="point">
+    </div>
+    <!-- 对话区域-->
+    <div id="chat">
+        <div class="robot">
+            <div><img src="img/robot.jpg" alt="加载失败"></div>
+            <div>
+                <div class="chat-left_triangle"></div>
+                <span style="text-align: left">你好啊</span>
+            </div>
+        </div>
+        <div class="human">
+            <div><img src="img/human.jpg" alt="加载失败!"></div>
+            <div>
+                <div class="chat-right_triangle"></div>
+                <span>嗯嗯!</span>
+            </div>
+        </div>
+    </div>
+    <!-- 发送区 -->
+    <div id="send">
+        <label for="input"></label><input type="text" id="input" alt="加载失败!">
+        <img src="img/emoticon.png" id="emoticon" alt="加载失败!">
+        <input type="button" id="sub" onclick="send()" value="发送">
+    </div>
+</div>
+<script>
+    //绑定键盘Enter键
+    document.onkeydown = function (ev) {
+        if(ev.keyCode === 13){
+            send();
+        }
+    };
+
+    let chat = document.getElementById("chat");
+    let human_begin = `<div class="human"><div><img src="img/human.jpg" alt="加载失败!"></div><div><div class="chat-right_triangle"></div><span>`;
+    let robot_begin = `<div class="robot"><div><img src="img/robot.jpg" alt="加载失败!"></div><div><div class="chat-left_triangle"></div><span>`;
+    let end = '</span></div></div>';
+
+    let session = Math.random().toString(); //获取一个session
+    function replace(text) {
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState === 4 && xhr.status === 200){
+                let rep = JSON.parse(xhr.responseText);
+                if (rep['code'] === 0)
+                    chat.innerHTML += robot_begin + rep['replace'] + end;
+                else
+                    chat.innerHTML += robot_begin + '出错了!' + end;
+                chat.scrollTop = chat.scrollHeight;  //滑动条定位到最下方
+            }
+        };
+        xhr.open("GET","http://mjyzz.club/chatbot.php?" + "session=" + session +"&mesg=" + text,true);
+        xhr.send();
+    }
+    function send() {
+        let text = document.getElementById("input").value;
+        document.getElementById("input").value = ""; //清空
+        chat.innerHTML += human_begin + text + end;
+        chat.scrollTop = chat.scrollHeight;
+        replace(text);
+    }
+</script>
+</body>
+</html>
